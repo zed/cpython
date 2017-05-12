@@ -354,6 +354,7 @@ class LongTest(unittest.TestCase):
         self.assertEqual(int('0o123', 0), 83)
         self.assertEqual(int('0x123', 0), 291)
         self.assertEqual(int('0b100', 0), 4)
+        self.assertEqual(int('0rXIV', 0), 14)
         self.assertEqual(int(' 0O123   ', 0), 83)
         self.assertEqual(int(' 0X123  ', 0), 291)
         self.assertEqual(int(' 0B100 ', 0), 4)

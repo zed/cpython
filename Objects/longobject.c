@@ -2106,6 +2106,30 @@ long_from_binary_base(const char **str, int base, PyLongObject **res)
     return 0;
 }
 
+/* *str points to the first digit in a string with a Roman numerals. On return,
+ * str is set to point to the first non-digit (which may be *str!).
+ *
+ * Return values:
+ *   -1 on syntax error (exception needs to be set, *res is untouched)
+ *   0 else (exception may be set, in that case *res is set to NULL)
+ */
+static int
+long_from_roman(const char **str, PyLongObject **res)
+{
+    int x = Py_from_roman_numerals_to_int(str);
+    if (x <= 0) {
+        return -1; // SyntaxError
+    }
+    PyLongObject *z = _PyLong_New(1);
+    if (z == NULL) {
+        *res = NULL;
+        return 0;
+    }
+    z->ob_digit[0] = (digit)x;
+    *res = z;
+    return 0;
+}
+
 /* Parses an int from a bytestring. Leading and trailing whitespace will be
  * ignored.
  *
@@ -2148,6 +2172,9 @@ PyLong_FromString(const char *str, char **pend, int base)
         else if (str[1] == 'o' || str[1] == 'O') {
             base = 8;
         }
+        else if (str[1] == 'r' || str[1] == 'R') {
+            base = 'r';
+        }
         else if (str[1] == 'b' || str[1] == 'B') {
             base = 2;
         }
@@ -2161,6 +2188,7 @@ PyLong_FromString(const char *str, char **pend, int base)
     if (str[0] == '0' &&
         ((base == 16 && (str[1] == 'x' || str[1] == 'X')) ||
          (base == 8  && (str[1] == 'o' || str[1] == 'O')) ||
+         (base == 'r'&& (str[1] == 'r' || str[1] == 'R')) ||
          (base == 2  && (str[1] == 'b' || str[1] == 'B')))) {
         str += 2;
         /* One underscore allowed here. */
@@ -2174,7 +2202,14 @@ PyLong_FromString(const char *str, char **pend, int base)
     }
 
     start = str;
-    if ((base & (base - 1)) == 0) {
+    if (base == 'r') {
+        int res = long_from_roman(&str, &z);
+        if (res < 0) {
+            /* Syntax error. */
+            goto onError;
+        }
+    }
+    else if ((base & (base - 1)) == 0) {
         int res = long_from_binary_base(&str, base, &z);
         if (res < 0) {
             /* Syntax error. */
