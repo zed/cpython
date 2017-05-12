@@ -102,9 +102,9 @@ PyOS_strtoul(const char *str, char **ptr, int base)
     while (*str && Py_ISSPACE(Py_CHARMASK(*str)))
         ++str;
 
-    /* check for leading 0b, 0o or 0x for auto-base or base 16 */
+    /* check for leading 0b, 0o, 0r or 0x for auto-base or base 16 */
     switch (base) {
-    case 0:             /* look for leading 0b, 0o or 0x */
+    case 0:             /* look for leading 0b, 0o, 0r or 0x */
         if (*str == '0') {
             ++str;
             if (*str == 'x' || *str == 'X') {
@@ -125,6 +125,18 @@ PyOS_strtoul(const char *str, char **ptr, int base)
                 }
                 ++str;
                 base = 8;
+            } else if (*str == 'r' || *str == 'R') {
+                ++str;
+                const char* start = str;
+                int x = Py_from_roman_numerals_to_int(&str);
+                if (x <= 0) { // error
+                    if (ptr)
+                        *ptr = (char *)start;
+                    return 0;
+                }
+                if (ptr)
+                    *ptr = (char *)str;
+                return (unsigned long)x;
             } else if (*str == 'b' || *str == 'B') {
                 /* there must be at least one digit after 0b */
                 if (_PyLong_DigitValue[Py_CHARMASK(str[1])] >= 2) {

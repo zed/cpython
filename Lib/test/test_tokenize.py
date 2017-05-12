@@ -83,6 +83,11 @@ def k(x):
     OP         '<='          (1, 6) (1, 8)
     NUMBER     '0O123'       (1, 9) (1, 14)
     """)
+        self.check_tokenize("0rXIV == 0Rxiv", """\
+    NUMBER     '0rXIV'       (1, 0) (1, 5)
+    OP         '=='          (1, 6) (1, 8)
+    NUMBER     '0Rxiv'       (1, 9) (1, 14)
+    """)
         self.check_tokenize("1234567 > ~0x15", """\
     NUMBER     '1234567'     (1, 0) (1, 7)
     OP         '>'           (1, 8) (1, 9)

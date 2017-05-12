@@ -132,5 +132,6 @@
 #include "dtoa.h"
 #include "fileutils.h"
 #include "pyfpe.h"
+#include "roman.h"
 
 #endif /* !Py_PYTHON_H */

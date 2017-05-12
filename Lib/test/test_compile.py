@@ -183,6 +183,8 @@ if 1:
         self.assertEqual(eval("000000000000008."), 8.)
         self.assertEqual(eval("000000000000009."), 9.)
         self.assertEqual(eval("0b101010"), 42)
+        self.assertEqual(eval("0rXIV"), 14)
+        self.assertRaises(SyntaxError, eval, "0r0XIV")
         self.assertEqual(eval("-0b000000000010"), -2)
         self.assertEqual(eval("0o777"), 511)
         self.assertEqual(eval("-0o0000010"), -8)

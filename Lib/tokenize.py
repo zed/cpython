@@ -126,7 +126,12 @@ Hexnumber = r'0[xX](?:_?[0-9a-fA-F])+'
 Binnumber = r'0[bB](?:_?[01])+'
 Octnumber = r'0[oO](?:_?[0-7])+'
 Decnumber = r'(?:0(?:_?0)*|[1-9](?:_?[0-9])*)'
-Intnumber = group(Hexnumber, Binnumber, Octnumber, Decnumber)
+Romannumber = ('0[rR](?=[MmDdCcLlXxVvIi])'
+               '(?:[Mm]{,3})'
+               '(?:[Cc](?:[Mm]|[Dd])|[Dd]?[Cc]{,3})'
+               '(?:[Xx](?:[Cc]|[Ll])|[Ll]?[Xx]{,3})'
+               '(?:[Ii](?:[Xx]|[Vv])|[Vv]?[Ii]{,3})') #XXX _ PEP 515
+Intnumber = group(Hexnumber, Binnumber, Octnumber, Romannumber, Decnumber)
 Exponent = r'[eE][-+]?[0-9](?:_?[0-9])*'
 Pointfloat = group(r'[0-9](?:_?[0-9])*\.(?:[0-9](?:_?[0-9])*)?',
                    r'\.[0-9](?:_?[0-9])*') + maybe(Exponent)

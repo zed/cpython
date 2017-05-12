@@ -1632,7 +1632,7 @@ tok_get(struct tok_state *tok, char **p_start, char **p_end)
     /* Number */
     if (isdigit(c)) {
         if (c == '0') {
-            /* Hex, octal or binary -- maybe. */
+            /* Hex, octal, roman or binary -- maybe. */
             c = tok_nextc(tok);
             if (c == 'x' || c == 'X') {
                 /* Hex */
@@ -1667,6 +1667,30 @@ tok_get(struct tok_state *tok, char **p_start, char **p_end)
                         c = tok_nextc(tok);
                     } while ('0' <= c && c < '8');
                 } while (c == '_');
+            }
+            else if (c == 'r' || c == 'R') {
+                /* Roman numeral */
+                char numeral[Py_MAX_ROMAN_SIZE] = {0};
+                size_t idigit = 0;
+                c = tok_nextc(tok);
+                do {
+                    if (c == '_') {
+                        c = tok_nextc(tok);
+                    }
+                    do {
+                        if (!Py_IS_ROMAN_DIGIT(c) || idigit == sizeof numeral - 1) {
+                          roman_error:
+                            tok->done = E_TOKEN;
+                            tok_backup(tok, c);
+                            return ERRORTOKEN;
+                        }
+                        numeral[idigit++] = c;
+                        c = tok_nextc(tok);
+                    } while (Py_IS_ROMAN_DIGIT(c));
+                } while (c == '_');
+                const char *s = numeral;
+                if (Py_from_roman_numerals_to_int(&s) <= 0)
+                    goto roman_error;
             }
             else if (c == 'b' || c == 'B') {
                 /* Binary */
