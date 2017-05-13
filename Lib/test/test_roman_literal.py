@@ -72,37 +72,24 @@ class TestRomanNumeral(unittest.TestCase):
                     self.assertEqual(to_roman(n), numeral)
 
     def test_four_tens(self):
-        self.assertRaises(SyntaxError, eval, '0rIIII')
-        self.assertRaises(SyntaxError, eval, '0rIIIII')
-        self.assertRaises(SyntaxError, eval, '0rXXXX')
-        self.assertRaises(SyntaxError, eval, '0rCCCC')
-        self.assertRaises(SyntaxError, eval, '0rMMMM')
-        self.assertRaises(ValueError, int, '0rIIII', 0)
-        self.assertRaises(ValueError, int, '0rIIIII', 0)
-        self.assertRaises(ValueError, int, '0rXXXX', 0)
-        self.assertRaises(ValueError, int, '0rCCCC', 0)
-        self.assertRaises(ValueError, int, '0rMMMM', 0)
+        for numeral in 'MDCLXVI':
+            self._test_invalid('0r' + (numeral * 4))
 
     def test_repeated_fives(self):
-        self.assertRaises(SyntaxError, eval, '0rVV')
-        self.assertRaises(SyntaxError, eval, '0rLL')
-        self.assertRaises(SyntaxError, eval, '0rDD')
-        self.assertRaises(ValueError, int, '0rVV', 0)
-        self.assertRaises(ValueError, int, '0rLL', 0)
-        self.assertRaises(ValueError, int, '0rDD', 0)
+        for five in 'DLV':
+            self._test_invalid('0r' + (five * 2))
 
     def test_unicode(self):
         for r in map(chr, range(0x2160, 0x2180)):
-            self.assertRaises(ValueError, int, '0r'+r, 0)
+            self._test_invalid(r)
 
     def _test_invalid(self, s):
-        self.assertRaises(SyntaxError, eval, '0r'+s)
-        self.assertRaises(ValueError, int, '0r'+s, 0)
+        self.assertRaises(SyntaxError, eval, '0r' + s)
+        self.assertRaises(ValueError, int, '0r' + s, 0)
 
     def test_wrong_letter(self):
         self._test_invalid('Z')
         self._test_invalid('IZ')
-
 
     def test_quote_valid_quote(self):
         # test empty input
@@ -126,14 +113,13 @@ class TestRomanNumeral(unittest.TestCase):
 
         # numerals from https://able2know.org/topic/54469-1
         for wrong in ['IIX', 'CCM', 'DMCCC', 'CMC', 'XMX',
-                  'IM', 'IC', 'XMIX', 'VIL', 'XVX', 'VIX', 'IVX', 'XIIX']:
+                      'IM', 'IC', 'XMIX', 'VIL', 'XVX', 'VIX', 'IVX', 'XIIX']:
             self._test_invalid(wrong)
 
         # from https://www.unc.edu/~rowlett/units/roman.html
         # and http://www.numericana.com/answer/roman.htm
         for sometimes_valid in ['XIIJ', 'xiij', 'VIIC', 'VIM']:
             self._test_invalid(sometimes_valid)
-
 
     def test_nodigits(self):
         with self.assertRaises(SyntaxError):
