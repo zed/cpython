@@ -11,14 +11,13 @@ typedef struct
 } Numeral;
 
 /**
- * Convert *n* to Roman *numeral*s.
+ * Convert positive *n* to Roman *numeral*s.
  *
  * *numeral* should be allocated buffer at least *size* size.
  *
  * Return the number of generated Roman numerals or -1 on error.
  */
-static int
-to_roman(int n, char *numeral, int size)
+PyAPI_FUNC(int) Py_to_roman_numerals_from_int(int n, char *numeral, int size)
 {
     static const Numeral map[] = {
         {"M",  1000, 1},
@@ -98,7 +97,7 @@ PyAPI_FUNC(int) Py_from_roman_numerals_to_int(const char **ptr)
     if (size == 0 || size >= (int)sizeof numeral)
         return -1; /* input is too short or too long */
     int n = from_roman(start, size);
-    int ret = to_roman(n, numeral, sizeof numeral);
+    int ret = Py_to_roman_numerals_from_int(n, numeral, sizeof numeral);
     if (ret < 0 || numeral[size] != '\0' || strncasecmp(start, numeral, size))
         return -1;
     return n;

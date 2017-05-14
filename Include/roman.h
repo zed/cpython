@@ -11,6 +11,7 @@ extern "C" {
             || c == 'C' || c == 'D' || c == 'M'                            \
             || c == 'c' || c == 'd' || c == 'm')
 
+PyAPI_FUNC(int) Py_to_roman_numerals_from_int(int n, char *numeral, int size);
 PyAPI_FUNC(int) Py_from_roman_numerals_to_int(const char **);
 
 #ifdef __cplusplus

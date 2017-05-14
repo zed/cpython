@@ -14,44 +14,13 @@ def is_proper_roman_numeral(s):
                         '(?P<units>   V?I{,3}|IX|IV)', s)
 
 
-# from https://svn.python.org/projects/python/trunk/Doc/tools/roman.py
-roman_numeral_map = (('M',  1000),
-                     ('CM', 900),
-                     ('D',  500),
-                     ('CD', 400),
-                     ('C',  100),
-                     ('XC', 90),
-                     ('L',  50),
-                     ('XL', 40),
-                     ('X',  10),
-                     ('IX', 9),
-                     ('V',  5),
-                     ('IV', 4),
-                     ('I',  1))
-
-
-def to_roman(number):
-    """convert integer to Roman numeral"""
-    if not isinstance(number, int):
-        raise TypeError(repr(type(number).__name__) +
-                        " object cannot be interpreted as an integer")
-    if not (0 < number < 4000):
-        raise ValueError("number out of range (must be 1..3999)")
-    result = ""
-    for numeral, integer in roman_numeral_map:
-        while number >= integer:
-            result += numeral
-            number -= integer
-    return result
-
-
 class TestRomanNumeral(unittest.TestCase):
     def test_all_valid(self):
         for n in range(1, 4000):
-            numerals = to_roman(n)
-            assert is_proper_roman_numeral(numerals)
+            numerals = roman(n)
+            assert is_proper_roman_numeral(numerals[2:])
             for sign in ['-', '', '+']:
-                kw = {'roman': sign + '0r' + numerals,
+                kw = {'roman': sign + numerals,
                       'expected': -n if sign == '-' else n}
                 with self.subTest(**kw):
                     self.assertEqual(eval(kw['roman']), kw['expected'])
@@ -69,7 +38,7 @@ class TestRomanNumeral(unittest.TestCase):
                 else:
                     n = eval(literal)
                     self.assertEqual(n, int(literal, 0))
-                    self.assertEqual(to_roman(n), numeral)
+                    self.assertEqual(roman(n), literal)
 
     def test_four_tens(self):
         for numeral in 'MDCLXVI':

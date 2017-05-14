@@ -1759,6 +1759,36 @@ long_to_decimal_string_internal(PyObject *aa,
     return 0;
 }
 
+static int
+long_to_roman_numerals_internal(PyObject *aa, PyObject **p_output)
+{
+    int overflow;
+    long result = PyLong_AsLongAndOverflow(aa, &overflow);
+    if (overflow || result < -3999 || result > 3999) {
+        PyErr_SetString(PyExc_OverflowError,
+                        "Python int too large to convert to Roman numerals");
+        return -1;
+    }
+    char s[Py_MAX_ROMAN_SIZE + 3] = {0}; // len('-0rMMMDCCCLXXXVIII\0')
+    char *p = s;
+    if (result < 0) {
+        result = -result;
+        *p++ = '-';
+    }
+    *p++ = '0';
+    *p++ = 'r';
+    if (Py_to_roman_numerals_from_int(result, p, Py_MAX_ROMAN_SIZE) < 0) {
+        PyErr_SetString(PyExc_ValueError,
+                        "can't convert int to Roman numerals");
+        return -1;
+    }
+    PyObject *str = PyUnicode_FromString(s);
+    if (str == NULL)
+        return -1;
+    *p_output = (PyObject *)str;
+    return 0;
+}
+
 static PyObject *
 long_to_decimal_string(PyObject *aa)
 {
@@ -1943,8 +1973,10 @@ _PyLong_Format(PyObject *obj, int base)
     int err;
     if (base == 10)
         err = long_to_decimal_string_internal(obj, &str, NULL, NULL, NULL);
-    else
+    else if (base != 'r')
         err = long_format_binary(obj, base, 1, &str, NULL, NULL, NULL);
+    else
+        err = long_to_roman_numerals_internal(obj, &str);
     if (err == -1)
         return NULL;
     return str;

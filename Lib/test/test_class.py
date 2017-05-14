@@ -365,6 +365,9 @@ class ClassTests(unittest.TestCase):
         callLst[:] = []
         hex(testme)
         self.assertCallStack([('__index__', (testme,))])
+        callLst[:] = []
+        roman(testme)
+        self.assertCallStack([('__index__', (testme,))])
 
 
     def testMisc(self):

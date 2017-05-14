@@ -395,6 +395,24 @@ builtin_bin(PyObject *module, PyObject *number)
     return PyNumber_ToBase(number, 2);
 }
 
+/*[clinic input]
+roman as builtin_roman
+
+    number: object
+    /
+
+Return the Roman numerals representation of an integer.
+
+   >>> roman(14)
+   '0rXIV'
+[clinic start generated code]*/
+
+static PyObject *
+builtin_roman(PyObject *module, PyObject *number)
+/*[clinic end generated code: output=7268d06027f807fc input=286bf829dc22ab5a]*/
+{
+    return PyNumber_ToBase(number, 'r');
+}
 
 /*[clinic input]
 callable as builtin_callable
@@ -2627,6 +2645,7 @@ static PyMethodDef builtin_methods[] = {
     BUILTIN_ANY_METHODDEF
     BUILTIN_ASCII_METHODDEF
     BUILTIN_BIN_METHODDEF
+    BUILTIN_ROMAN_METHODDEF
     BUILTIN_CALLABLE_METHODDEF
     BUILTIN_CHR_METHODDEF
     BUILTIN_COMPILE_METHODDEF

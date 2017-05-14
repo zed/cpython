@@ -2647,6 +2647,37 @@ order (MRO) for bases """
         self.assertIs((octlong(0) >> 12).__class__, int)
         self.assertIs(abs(octlong(0)).__class__, int)
 
+        class romanlong(int):
+            __slots__ = []
+            def __str__(self):
+                return roman(self)
+            def __add__(self, other):
+                return self.__class__(super(romanlong, self).__add__(other))
+            __radd__ = __add__
+        self.assertEqual(str(romanlong(3) + 5), "0rVIII")
+        self.assertEqual(str(5 + romanlong(3000)), "0rMMMV")
+        a = romanlong(1234)
+        self.assertEqual(a, 1234)
+        self.assertEqual(int(a), 1234)
+        self.assertEqual(hash(a), hash(1234))
+        self.assertIs(int(a).__class__, int)
+        self.assertIs((+a).__class__, int)
+        self.assertIs((-a).__class__, int)
+        self.assertIs((-romanlong(0)).__class__, int)
+        self.assertIs((a >> 0).__class__, int)
+        self.assertIs((a << 0).__class__, int)
+        self.assertIs((a - 0).__class__, int)
+        self.assertIs((a * 1).__class__, int)
+        self.assertIs((a ** 1).__class__, int)
+        self.assertIs((a // 1).__class__, int)
+        self.assertIs((1 * a).__class__, int)
+        self.assertIs((a | 0).__class__, int)
+        self.assertIs((a ^ 0).__class__, int)
+        self.assertIs((a & -1).__class__, int)
+        self.assertIs((romanlong(0) << 12).__class__, int)
+        self.assertIs((romanlong(0) >> 12).__class__, int)
+        self.assertIs(abs(romanlong(0)).__class__, int)
+
         # Because octlong overrides __add__, we can't check the absence of +0
         # optimizations using octlong.
         class longclone(int):

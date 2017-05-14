@@ -59,6 +59,18 @@ PyDoc_STRVAR(builtin_bin__doc__,
 #define BUILTIN_BIN_METHODDEF    \
     {"bin", (PyCFunction)builtin_bin, METH_O, builtin_bin__doc__},
 
+PyDoc_STRVAR(builtin_roman__doc__,
+"roman($module, number, /)\n"
+"--\n"
+"\n"
+"Return the Roman numerals representation of an integer.\n"
+"\n"
+"   >>> roman(14)\n"
+"   \'0rXIV\'");
+
+#define BUILTIN_ROMAN_METHODDEF    \
+    {"roman", (PyCFunction)builtin_roman, METH_O, builtin_roman__doc__},
+
 PyDoc_STRVAR(builtin_callable__doc__,
 "callable($module, obj, /)\n"
 "--\n"
@@ -722,4 +734,4 @@ builtin_issubclass(PyObject *module, PyObject **args, Py_ssize_t nargs, PyObject
 exit:
     return return_value;
 }
-/*[clinic end generated code: output=3234725ef4d8bbf1 input=a9049054013a1b77]*/
+/*[clinic end generated code: output=7413d07ab21c60a9 input=a9049054013a1b77]*/

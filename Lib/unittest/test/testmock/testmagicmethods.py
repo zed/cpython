@@ -285,6 +285,7 @@ class TestMockingMagicMethods(unittest.TestCase):
         # so these tests are for __index__ in py3k
         self.assertEqual(oct(mock), '0o1')
         self.assertEqual(hex(mock), '0x1')
+        self.assertEqual(roman(mock), '0rI')
         # how to test __sizeof__ ?
 
 

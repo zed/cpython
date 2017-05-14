@@ -1493,6 +1493,27 @@ class BuiltinTest(unittest.TestCase):
         self.assertEqual(bin(-(2**65)), '-0b1' + '0' * 65)
         self.assertEqual(bin(-(2**65-1)), '-0b' + '1' * 65)
 
+    def test_roman(self):
+        self.assertRaises(ValueError, roman, 0)
+        self.assertRaises(OverflowError, roman, 4000)
+        self.assertRaises(OverflowError, roman, 5000)
+        self.assertRaises(OverflowError, roman, -4000)
+        self.assertRaises(OverflowError, roman, -5000)
+        self.assertRaises(TypeError, roman, ())
+        self.assertRaises(TypeError, roman, 1.0)
+        self.assertEqual(roman(1), '0rI')
+        self.assertEqual(roman(-1), '-0rI')
+        self.assertEqual(roman(4), '0rIV')
+        self.assertEqual(roman(9), '0rIX')
+        self.assertEqual(roman(40), '0rXL')
+        self.assertEqual(roman(90), '0rXC')
+        self.assertEqual(roman(400), '0rCD')
+        self.assertEqual(roman(900), '0rCM')
+        self.assertEqual(roman(3888), '0rMMMDCCCLXXXVIII')
+        self.assertEqual(roman(-3888), '-0rMMMDCCCLXXXVIII')
+        self.assertEqual(roman(3999), '0rMMMCMXCIX')
+        self.assertEqual(roman(-3999), '-0rMMMCMXCIX')
+
     def test_bytearray_translate(self):
         x = bytearray(b"abc")
         self.assertRaises(ValueError, x.translate, b"1", 1)

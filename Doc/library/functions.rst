@@ -10,20 +10,20 @@ are always available.  They are listed here in alphabetical order.
 ===================  =================  ==================  ================  ====================
 ..                   ..                 Built-in Functions  ..                ..
 ===================  =================  ==================  ================  ====================
-:func:`abs`          |func-dict|_       :func:`help`        :func:`min`       :func:`setattr`
-:func:`all`          :func:`dir`        :func:`hex`         :func:`next`      :func:`slice`
-:func:`any`          :func:`divmod`     :func:`id`          :func:`object`    :func:`sorted`
-:func:`ascii`        :func:`enumerate`  :func:`input`       :func:`oct`       :func:`staticmethod`
-:func:`bin`          :func:`eval`       :func:`int`         :func:`open`      |func-str|_
-:func:`bool`         :func:`exec`       :func:`isinstance`  :func:`ord`       :func:`sum`
-|func-bytearray|_    :func:`filter`     :func:`issubclass`  :func:`pow`       :func:`super`
-|func-bytes|_        :func:`float`      :func:`iter`        :func:`print`     |func-tuple|_
-:func:`callable`     :func:`format`     :func:`len`         :func:`property`  :func:`type`
-:func:`chr`          |func-frozenset|_  |func-list|_        |func-range|_     :func:`vars`
-:func:`classmethod`  :func:`getattr`    :func:`locals`      :func:`repr`      :func:`zip`
-:func:`compile`      :func:`globals`    :func:`map`         :func:`reversed`  :func:`__import__`
-:func:`complex`      :func:`hasattr`    :func:`max`         :func:`round`
-:func:`delattr`      :func:`hash`       |func-memoryview|_  |func-set|_
+:func:`abs`          |func-dict|_       :func:`help`        :func:`min`       |func-set|_
+:func:`all`          :func:`dir`        :func:`hex`         :func:`next`      :func:`setattr`
+:func:`any`          :func:`divmod`     :func:`id`          :func:`object`    :func:`slice`
+:func:`ascii`        :func:`enumerate`  :func:`input`       :func:`oct`       :func:`sorted`
+:func:`bin`          :func:`eval`       :func:`int`         :func:`open`      :func:`staticmethod`
+:func:`bool`         :func:`exec`       :func:`isinstance`  :func:`ord`       |func-str|_
+|func-bytearray|_    :func:`filter`     :func:`issubclass`  :func:`pow`       :func:`sum`
+|func-bytes|_        :func:`float`      :func:`iter`        :func:`print`     :func:`super`
+:func:`callable`     :func:`format`     :func:`len`         :func:`property`  |func-tuple|_
+:func:`chr`          |func-frozenset|_  |func-list|_        |func-range|_     :func:`type`
+:func:`classmethod`  :func:`getattr`    :func:`locals`      :func:`repr`      :func:`vars`
+:func:`compile`      :func:`globals`    :func:`map`         :func:`reversed`  :func:`zip`
+:func:`complex`      :func:`hasattr`    :func:`max`         :func:`roman`     :func:`__import__`
+:func:`delattr`      :func:`hash`       |func-memoryview|_  :func:`round`
 ===================  =================  ==================  ================  ====================
 
 .. using :func:`dict` would create a link to another page, so local targets are
@@ -1253,6 +1253,23 @@ are always available.  They are listed here in alphabetical order.
    a :meth:`__reversed__` method or supports the sequence protocol (the
    :meth:`__len__` method and the :meth:`__getitem__` method with integer
    arguments starting at ``0``).
+
+
+.. function:: roman(number)
+
+   Convert an integer number to uppercase Roman numerals prefixed with
+   "0r", for example:
+
+      >>> roman(14)
+      '0rXIV'
+      >>> roman(-50)
+      '-0rL'
+
+   If number is not a Python :class:`int` object, it has to define an
+   __index__() method that returns an integer.
+
+   See also :func:`int` for converting Roman numerals prefixed with
+   "0r" to an integer using a base of 0.
 
 
 .. function:: round(number[, ndigits])
