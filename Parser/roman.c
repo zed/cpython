@@ -3,6 +3,17 @@
 #include <ctype.h>
 #include <string.h>
 
+#ifndef HAVE_STRINGS_H
+#ifdef _MSC_VER
+//not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in
+//mingw
+#undef strncasecmp
+#define strncasecmp _strnicmp
+#else
+#error "define strncasecmp() for non-posix, non-windows?"
+#endif /* !_MSC_VER */
+#endif /* !HAVE_STRINGS_H */
+
 typedef struct
 {
     const char* numeral;
